@@ -88,11 +88,14 @@ class SiteController extends Controller
                 'class' => 'yii\web\ErrorAction',
             ],
             //请求验证码的，是个独立动作，非行内动作
+            //独立动作的入口都是动作类的run方法
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 //当测试环境时，可以固定验证码，比如8888,testme等
                 //'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-                'fixedVerifyCode' => YII_ENV_DEV? 'testme' : null,
+                'width'=> 180,
+//                'fixedVerifyCode' => YII_ENV_DEV? '8888' : null,
+                'fixedVerifyCode' => null,
             ],
         ];
     }
@@ -142,7 +145,7 @@ class SiteController extends Controller
 //         $end = microtime(true);
 //         $duration = $end-$start;
         var_dump('hello');
-        return 'mail finished'.$duration;
+        return 'mail finished';
     }
 
     /**
@@ -157,6 +160,7 @@ class SiteController extends Controller
 
         //不是我们想到的使用认证User，而是用LoginForm模型，作为中间件和认证User关联
         $model = new LoginForm();
+        $model->setScenario('login');
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             //使用了web\Controller控制器的方法。其实是Response组件的跳转方法（redirect)快捷方式
             return $this->goBack();

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Cars;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -359,4 +360,33 @@ Content-Length: 11562225
         //第一个参数是服务端文件系统的路径，第二个参数是展示给浏览器端的文件名。两者有可能相同
              return Yii::$app->response->sendFile("$storagePath/$filename", $filename);
          }
+
+    /**
+     * 学习下新的行为功能-类型转换Typecasting
+     *
+     * @return string
+     */
+    public function actionCars()
+    {
+
+        //获取模型之后进行类型转换
+        $model = Cars::findOne(1);
+        var_dump($model->getAttributes());
+        return 'OKla';
+
+
+        $model = new Cars();
+        $model->num = '345';
+        $model->money = '3.45';
+        $model->is_test = '1';
+        //主动执行【类型转换】
+//        $model->typecastAttributes();
+        //默认配置在validate之后进行类型转换
+        if($model->save()) {
+            echo "save OK";
+        }else{
+            var_dump($model->getErrors());
+        }
+//        var_dump($model->getAttributes());
+    }
 }
